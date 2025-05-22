@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система формування наказів - Макет</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-panel {
+            background: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-header {
+            background-color: #4472C4;
+            color: white;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            border-radius: 3px 3px 0 0;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .form-label {
+            width: 150px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+
+        .form-button {
+            background-color: #5B9BD5;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .form-button:hover {
+            background-color: #4472C4;
+        }
+
+        .form-button.danger {
+            background-color: #E74C3C;
+        }
+
+        .form-button.success {
+            background-color: #27AE60;
+        }
+
+        .order-content {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: 'Times New Roman', serif;
+            line-height: 1.5;
+        }
+
+        .order-header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .order-section {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            background-color: #FF6B6B;
+            color: white;
+            padding: 5px 10px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .order-point {
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+
+        .point-number {
+            font-weight: bold;
+        }
+
+        .highlighted-text {
+            background-color: #90EE90;
+            padding: 2px 4px;
+        }
+
+        .navigation-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .step-indicator {
+            background: #17a2b8;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .demo-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="demo-note">
+            <strong>📋 Демонстрація роботи системи формування наказів</strong><br>
+            Це інтерактивний макет, який показує, як буде працювати ваша система в Access
+        </div>
+
+        <!-- Крок 1: Створення нового наказу -->
+        <div class="form-panel" id="step1">
+            <div class="form-header">Крок 1: Створення нового наказу</div>
+            <div class="form-row">
+                <div class="form-label">Номер наказу:</div>
+                <input type="text" class="form-input" value="156" id="orderNumber">
+            </div>
+            <div class="form-row">
+                <div class="form-label">Дата наказу:</div>
+                <input type="date" class="form-input" value="2025-05-22" id="orderDate">
+            </div>
+            <div class="form-row">
+                <div class="form-label">Хто підписує:</div>
+                <input type="text" class="form-input" value="Командир військової частини" id="signedBy">
+            </div>
+            <div class="form-row">
+                <div class="form-label"></div>
+                <button class="form-button success" onclick="goToStep2()">Перейти до наповнення наказу</button>
+            </div>
+        </div>
+
+        <!-- Крок 2: Головна форма наповнення наказу -->
+        <div class="form-panel" id="step2" style="display: none;">
+            <div class="form-header">Крок 2: Наповнення наказу № 156 від 22.05.2025</div>
+
+            <div class="navigation-panel">
+                <div class="step-indicator">Додавання пунктів до наказу</div>
+                <div>
+                    <button class="form-button" onclick="showAddPointForm()">➕ Додати новий пункт</button>
+                    <button class="form-button" onclick="generateOrder()">📄 Сформувати наказ</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <div class="form-row">
+                    <div class="form-label">Тип блоку:</div>
+                    <select class="form-input" id="blockType">
+                        <option value="">Виберіть тип блоку...</option>
+                        <option value="arrival">Вважати такими, що прибули та приступили до виконання службових
+                            обов'язків</option>
+                        <option value="departure">Вважати такими, що вибули</option>
+                    </select>
+                    <button class="form-button" onclick="showAddPointForm()">Додати пункт</button>
+                </div>
+            </div>
+
+            <!-- Список доданих пунктів -->
+            <div class="order-content" id="addedPoints">
+                <div class="order-header">Додані пункти наказу:</div>
+                <div id="pointsList">
+                    <em>Поки що пунктів немає. Додайте перший пункт.</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- Крок 3: Форма додавання пункту -->
+        <div class="form-panel" id="step3" style="display: none;">
+            <div class="form-header">Крок 3: Додавання пункту до наказу</div>
+
+            <div class="form-row">
+                <div class="form-label">Тип пункту:</div>
+                <select class="form-input" id="pointType" onchange="showPointFields()">
+                    <option value="">Виберіть тип пункту...</option>
+                    <option value="business_trip">З відрядження</option>
+                    <option value="vacation">З відпустки за сімейними обставинами</option>
+                    <option value="hospital">З госпіталю/лікарні</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Номер пункту:</div>
+                <input type="text" class="form-input" value="2.1" readonly id="pointNumber">
+            </div>
+
+            <!-- Поля для вибору особи -->
+            <div class="form-row">
+                <div class="form-label">Прізвище:</div>
+                <select class="form-input" id="personSelect" onchange="fillPersonData()">
+                    <option value="">Виберіть особу...</option>
+                    <option value="1">НІКОНОВ Дмитро Валерійович</option>
+                    <option value="2">ПЕТРЕНКО Іван Іванович</option>
+                    <option value="3">СИДОРЕНКО Олександр Петрович</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Звання:</div>
+                <input type="text" class="form-input" id="rank" readonly>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Посада:</div>
+                <input type="text" class="form-input" id="position" readonly>
+            </div>
+
+            <!-- Додаткові поля залежно від типу пункту -->
+            <div id="additionalFields" style="display: none;">
+                <div class="form-row" id="dateField">
+                    <div class="form-label">Дата:</div>
+                    <input type="date" class="form-input" id="eventDate">
+                </div>
+
+                <div class="form-row" id="unitField">
+                    <div class="form-label">Військова частина:</div>
+                    <input type="text" class="form-input" id="militaryUnit" value="А7323">
+                </div>
+
+                <div class="form-row" id="weaponField">
+                    <div class="form-label">Особиста зброя:</div>
+                    <input type="text" class="form-input" id="weapon" value="ТТ № ПА446">
+                </div>
+            </div>
+
+            <!-- Сформований текст -->
+            <div class="form-row">
+                <div class="form-label">Сформований текст:</div>
+                <textarea class="form-input" id="generatedText" rows="4" readonly
+                    placeholder="Текст буде сформований автоматично після заповнення всіх полів"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label"></div>
+                <button class="form-button" onclick="generateText()">🔄 Сформувати текст</button>
+                <button class="form-button success" onclick="addPointToOrder()">✅ Додати до наказу</button>
+                <button class="form-button danger" onclick="cancelAddPoint()">❌ Скасувати</button>
+            </div>
+        </div>
+
+        <!-- Крок 4: Готовий наказ -->
+        <div class="form-panel" id="step4" style="display: none;">
+            <div class="form-header">Крок 4: Готовий наказ</div>
+
+            <div class="navigation-panel">
+                <div class="step-indicator">Наказ сформовано</div>
+                <div>
+                    <button class="form-button" onclick="printOrder()">🖨️ Роздрукувати</button>
+                    <button class="form-button" onclick="editOrder()">✏️ Редагувати</button>
+                    <button class="form-button success" onclick="startNewOrder()">📋 Новий наказ</button>
+                </div>
+            </div>
+
+            <div class="order-content" id="finalOrder">
+                <div class="order-header">
+                    НАКАЗ<br>
+                    командира військової частини А7323<br>
+                    № 156 від 22 травня 2025 року
+                </div>
+
+                <div class="order-section">
+                    <div class="section-title">Вважати такими, що прибули та приступили до виконання службових
+                        обов'язків:</div>
+
+                    <div class="order-point">
+                        <span class="point-number">2.1.</span> До військової частини А7323, з 14 квітня 2025 року до
+                        окремого розпорядження:
+                        <span class="highlighted-text">майора НІКОНОВА Дмитра Валерійовича</span>, Командира військової
+                        частини А7046, озброєного пістолет ТТ №
+                        ПА446.
+                        Зарахувати майора Ніконова Р.В. на продовольче забезпечення за каталогом (3-х разове харчування)
+                        з 15 квітня 2025 року при військовій частині А7323.
+                        <br><strong>Підстава:</strong> наказ командира військової частини А7046 №112 від 12.04.2025;
+                        посвідчення про відрядження № 793від 12.04.2025.
+                    </div>
+
+                    <div class="order-point">
+                        <span class="point-number">2.2.</span> З відпустки за сімейними обставинами, з 14 квітня 2025
+                        року:
+                        <span class="highlighted-text">сержанта ЗАТРЕБЕЛЬНУ Надію Олексіївну</span>, сержанта із
+                        матеріального забезпечення 2 стрілецької роти військової частини А7323, з відпустки за сімейними
+                        обставинами 14 квітня 2025 року.
+                        Зарахувати сержанта Затребельну Н. на продовольче забезпечення за каталогом (3-х разове
+                        харчування) 15 квітня 2025 року при військовій частині А7323.
+                        <br><strong>Підстава:</strong> відпускний квиток сержанта Н. Затребельну від 01 квітня 2025 року
+                        №67.
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; text-align: right;">
+                    Командир військової частини А7323<br>
+                    <div style="margin-top: 20px;">___________________ (підпис)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let addedPoints = [];
+
+        function goToStep2() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            currentStep = 2;
+        }
+
+        function showAddPointForm() {
+            const blockType = document.getElementById('blockType').value;
+            if (!blockType) {
+                alert('Спочатку виберіть тип блоку!');
+                return;
+            }
+
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+            currentStep = 3;
+        }
+
+        function showPointFields() {
+            const pointType = document.getElementById('pointType').value;
+            const additionalFields = document.getElementById('additionalFields');
+
+            if (pointType) {
+                additionalFields.style.display = 'block';
+
+                // Показати/приховати поля залежно від типу
+                document.getElementById('dateField').style.display = 'flex';
+                document.getElementById('unitField').style.display = pointType === 'business_trip' ? 'flex' : 'none';
+                document.getElementById('weaponField').style.display = pointType === 'business_trip' ? 'flex' : 'none';
+            } else {
+                additionalFields.style.display = 'none';
+            }
+        }
+
+        function fillPersonData() {
+            const personId = document.getElementById('personSelect').value;
+            const rankField = document.getElementById('rank');
+            const positionField = document.getElementById('position');
+
+            // Симуляція автозаповнення даних з бази
+            if (personId === '1') {
+                rankField.value = 'майор';
+                positionField.value = 'начальник служби пально-мастильних матеріалів';
+            } else if (personId === '2') {
+                rankField.value = 'лейтенант';
+                positionField.value = 'командир взводу';
+            } else if (personId === '3') {
+                rankField.value = 'сержант';
+                positionField.value = 'сержант із матеріального забезпечення';
+            }
+        }
+
+        function generateText() {
+            const pointType = document.getElementById('pointType').value;
+            const person = document.getElementById('personSelect').selectedOptions[0]?.text;
+            const rank = document.getElementById('rank').value;
+            const position = document.getElementById('position').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const unit = document.getElementById('militaryUnit').value;
+            const weapon = document.getElementById('weapon').value;
+
+            if (!pointType || !person || !rank) {
+                alert('Заповніть всі обов\'язкові поля!');
+                return;
+            }
+
+            let generatedText = '';
+
+            if (pointType === 'business_trip') {
+                generatedText = `До військової частини ${unit}, ${formatDate(eventDate)} року до окремого розпорядження: ${rank} ${person}, ${position} військової частини А7046, озброєний пістолет ${weapon}.`;
+            } else if (pointType === 'vacation') {
+                generatedText = `З відпустки за сімейними обставинами, з ${formatDate(eventDate)} року: ${rank} ${person}, ${position} військової частини ${unit}, з відпустки за сімейними обставинами ${formatDate(eventDate)} року.`;
+            }
+
+            document.getElementById('generatedText').value = generatedText;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.getDate() + ' ' +
+                ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
+                    'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'][date.getMonth()] + ' ' +
+                date.getFullYear();
+        }
+
+        function addPointToOrder() {
+            const generatedText = document.getElementById('generatedText').value;
+            const pointNumber = document.getElementById('pointNumber').value;
+
+            if (!generatedText) {
+                alert('Спочатку сформуйте текст!');
+                return;
+            }
+
+            addedPoints.push({
+                number: pointNumber,
+                text: generatedText
+            });
+
+            updatePointsList();
+            cancelAddPoint();
+        }
+
+        function updatePointsList() {
+            const pointsList = document.getElementById('pointsList');
+
+            if (addedPoints.length === 0) {
+                pointsList.innerHTML = '<em>Поки що пунктів немає. Додайте перший пункт.</em>';
+            } else {
+                pointsList.innerHTML = addedPoints.map(point =>
+                    `<div class="order-point">
+                        <span class="point-number">${point.number}.</span> ${point.text}
+                    </div>`
+                ).join('');
+            }
+        }
+
+        function cancelAddPoint() {
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+
+            // Очистити форму
+            document.getElementById('pointType').value = '';
+            document.getElementById('personSelect').value = '';
+            document.getElementById('rank').value = '';
+            document.getElementById('position').value = '';
+            document.getElementById('generatedText').value = '';
+            document.getElementById('additionalFields').style.display = 'none';
+        }
+
+        function generateOrder() {
+            if (addedPoints.length === 0) {
+                alert('Додайте хоча б один пункт до наказу!');
+                return;
+            }
+
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step4').style.display = 'block';
+        }
+
+        function editOrder() {
+            document.getElementById('step4').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        }
+
+        function startNewOrder() {
+            // Очистити всі дані і повернутися до початку
+            addedPoints = [];
+            updatePointsList();
+            document.getElementById('step4').style.display = 'none';
+            document.getElementById('step1').style.display = 'block';
+
+            // Збільшити номер наказу
+            const currentNumber = parseInt(document.getElementById('orderNumber').value);
+            document.getElementById('orderNumber').value = currentNumber + 1;
+        }
+
+        function printOrder() {
+            window.print();
+        }
+
+        // Додати навігацію клавішами (як ви просили)
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowLeft' && currentStep > 1) {
+                // Логіка для переходу на попередній крок
+                console.log('Попередній крок');
+            } else if (event.key === 'ArrowRight' && currentStep < 4) {
+                // Логіка для переходу на наступний крок
+                console.log('Наступний крок');
+            }
+        });
+    </script>
+</body>
+
+</html>
